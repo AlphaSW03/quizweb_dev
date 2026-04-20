@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WebDev Quiz</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- ░░ PARTICLES ░░ -->
+  <canvas id="particles"></canvas>
+
+  <div class="app">
+
+    <!-- HEADER -->
+    <header class="header">
+      <div class="logo">
+        <span class="logo-icon">⟨/⟩</span>
+        <span class="logo-text">WebDev<span>Quiz</span></span>
+      </div>
+      <div class="header-right">
+        <div class="header-score" id="headerScore" style="display:none">
+          Score: <strong id="liveScore">0</strong>
+        </div>
+        <button class="btn-icon" id="historyToggleBtn" title="History">📋</button>
+      </div>
+    </header>
+
+    <!-- ░░ SCREEN: START ░░ -->
+    <section class="screen active" id="startScreen">
+      <div class="card start-card">
+        <div class="glow-ring"></div>
+        <p class="badge">🚀 15 Questions · 30s Each</p>
+        <h1>Test Your<br/><span class="neon">Web Dev</span><br/>Knowledge</h1>
+        <p class="subtitle">HTML · CSS · JavaScript · React · APIs</p>
+
+        <!-- Player Name -->
+        <div class="name-wrap">
+          <label class="name-label">Your Name</label>
+          <input class="name-input" id="playerName" type="text" placeholder="Enter your name..." maxlength="20" />
+        </div>
+
+        <!-- LocalStorage Stats -->
+        <div class="saved-stats" id="savedStats" style="display:none">
+          <div class="ss-item"><span id="ssHighscore">0</span><small>🏆 Best Score</small></div>
+          <div class="ss-item"><span id="ssGames">0</span><small>🎮 Games Played</small></div>
+          <div class="ss-item"><span id="ssAvg">0%</span><small>📊 Avg Score</small></div>
+        </div>
+
+        <div class="stats-row">
+          <div class="stat"><span>15</span><small>Questions</small></div>
+          <div class="stat"><span>30s</span><small>Per Q</small></div>
+          <div class="stat"><span>300</span><small>Max Pts</small></div>
+        </div>
+
+        <div class="start-btns">
+          <button class="btn btn-start" id="startBtn">Start Quiz →</button>
+          <button class="btn btn-history" id="viewHistoryBtn">📋 History</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ░░ SCREEN: QUIZ ░░ -->
+    <section class="screen" id="quizScreen">
+      <div class="progress-wrap">
+        <div class="progress-top">
+          <span id="qCounter">Q 1 / 15</span>
+          <span id="qPoints" class="pts-badge">10 pts</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+      </div>
+
+      <div class="card quiz-card">
+        <div class="timer-ring-wrap">
+          <svg class="timer-ring" viewBox="0 0 64 64">
+            <circle class="ring-bg" cx="32" cy="32" r="28"/>
+            <circle class="ring-fill" id="ringFill" cx="32" cy="32" r="28"/>
+          </svg>
+          <span class="timer-num" id="timerNum">30</span>
+        </div>
+        <h2 class="question-text" id="questionText">Loading...</h2>
+        <div class="options" id="options"></div>
+      </div>
+
+      <div class="quiz-footer">
+        <div class="score-live">Score: <strong id="scoreDisplay">0</strong></div>
+        <button class="btn btn-next" id="nextBtn" style="display:none">Next →</button>
+      </div>
+    </section>
+
+    <!-- ░░ SCREEN: RESULT ░░ -->
+    <section class="screen" id="resultScreen">
+      <div class="card result-card">
+        <div class="result-emoji" id="resultEmoji">🏆</div>
+        <h2 id="resultTitle">Quiz Complete!</h2>
+        <p id="resultMsg" class="result-msg"></p>
+
+        <div class="score-circle">
+          <svg viewBox="0 0 120 120">
+            <circle class="sc-bg" cx="60" cy="60" r="52"/>
+            <circle class="sc-fill" id="scoreCircleFill" cx="60" cy="60" r="52"/>
+          </svg>
+          <div class="score-inner">
+            <span class="score-num" id="finalScore">0</span>
+            <span class="score-label">pts</span>
+          </div>
+        </div>
+
+        <div class="result-stats">
+          <div class="rs"><span id="rCorrect">0</span><small>Correct</small></div>
+          <div class="rs"><span id="rWrong">0</span><small>Wrong</small></div>
+          <div class="rs"><span id="rPercent">0%</span><small>Score</small></div>
+        </div>
+
+        <p class="highscore-line" id="highscoreLine"></p>
+
+        <div class="result-btns">
+          <button class="btn btn-restart" id="restartBtn">↺ Play Again</button>
+          <button class="btn btn-history" id="viewHistoryBtn2">📋 View History</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ░░ SCREEN: HISTORY ░░ -->
+    <section class="screen" id="historyScreen">
+      <div class="history-header">
+        <div>
+          <h2 class="history-title">📋 Quiz History</h2>
+          <p class="history-sub" id="historySub">Your past attempts — saved in browser</p>
+        </div>
+        <button class="btn-clear" id="clearHistoryBtn">🗑️ Clear All</button>
+      </div>
+
+      <!-- Overall summary cards -->
+      <div class="history-summary" id="historySummary"></div>
+
+      <!-- List of attempts -->
+      <div class="history-list" id="historyList"></div>
+
+      <button class="btn btn-back" id="backBtn">← Back to Home</button>
+    </section>
+
+  </div>
+
+  <script src="questions.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
